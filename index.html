@@ -91,23 +91,23 @@
 
   <div class="egg-toast" id="egg-toast"></div>
 
-  <div class="gb-toggle" id="gb-toggle">
+  <button class="gb-toggle" id="gb-toggle" type="button">
     <span class="gb-toggle-icon">&gt;_</span>
     <span class="gb-toggle-label">guestbook</span>
-  </div>
+  </button>
 
   <div class="gb-panel" id="gb-panel">
     <div class="gb-header">
       <span class="gb-title">&gt;_ guestbook</span>
       <span class="gb-count" id="gb-count"></span>
     </div>
-    <div class="gb-entries" id="gb-entries">
-      <div class="gb-loading">loading...</div>
-    </div>
+    <div class="gb-chat" id="gb-entries"><div class="gb-loading">loading...</div></div>
     <div class="gb-form">
-      <input class="gb-input" id="gb-name"    type="text" placeholder="name"             maxlength="30"  autocomplete="off" />
-      <input class="gb-input" id="gb-message" type="text" placeholder="leave a mark..."  maxlength="200" autocomplete="off" />
-      <button class="gb-submit" id="gb-submit">[sign]</button>
+      <div class="gb-form-row">
+        <input  class="gb-input gb-name" id="gb-name"    type="text" placeholder="name"            maxlength="30"  autocomplete="off" spellcheck="false" />
+        <input  class="gb-input gb-msg"  id="gb-message" type="text" placeholder="leave a mark..." maxlength="200" autocomplete="off" spellcheck="false" />
+        <button class="gb-submit" id="gb-submit" type="button">&gt;</button>
+      </div>
     </div>
   </div>
 

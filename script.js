@@ -421,7 +421,7 @@ function escapeHtml(s) {
 }
 
 function renderEntries(entries) {
-  gbCount.textContent = entries.length ? `${entries.length} signature${entries.length !== 1 ? "s" : ""}` : "";
+  gbCount.textContent = entries.length ? `${entries.length} signed` : "";
   if (!entries.length) {
     gbEntries.innerHTML = '<div class="gb-empty">no signatures yet — be the first</div>';
     return;
@@ -429,14 +429,11 @@ function renderEntries(entries) {
   gbEntries.innerHTML = entries.map(e => {
     const date = new Date(e.ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     return `<div class="gb-entry">
-      <div class="gb-entry-header">
-        <span class="gb-entry-prompt">&gt;</span>
-        <span class="gb-entry-name">${escapeHtml(e.name)}</span>
-        <span class="gb-entry-date">${date}</span>
-      </div>
-      <div class="gb-entry-msg">${escapeHtml(e.message)}</div>
+      <span class="gb-entry-name">${escapeHtml(e.name)}:</span><span class="gb-entry-msg">${escapeHtml(e.message)}</span>
+      <span class="gb-entry-date">${date}</span>
     </div>`;
   }).join("");
+  gbEntries.scrollTop = gbEntries.scrollHeight;
 }
 
 async function fetchEntries() {
@@ -453,6 +450,7 @@ async function fetchEntries() {
 function toggleGuestbook() {
   gbOpen = !gbOpen;
   gbPanel.classList.toggle("open", gbOpen);
+  gbToggle.classList.toggle("active", gbOpen);
   if (gbOpen) fetchEntries();
 }
 
@@ -461,10 +459,13 @@ gbToggle.addEventListener("click", e => {
   toggleGuestbook();
 });
 
+gbPanel.addEventListener("click", e => e.stopPropagation());
+
 document.addEventListener("click", e => {
   if (gbOpen && !gbPanel.contains(e.target) && !gbToggle.contains(e.target)) {
     gbOpen = false;
     gbPanel.classList.remove("open");
+    gbToggle.classList.remove("active");
   }
 });
 
