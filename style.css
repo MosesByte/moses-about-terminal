@@ -272,6 +272,7 @@ input {
   font: inherit;
   font-size: 15px;
   caret-color: var(--text-strong);
+  padding: 0 0 0 2px;
 }
 
 .output::-webkit-scrollbar {
