@@ -100,6 +100,32 @@ if (savedTheme && themeMap.includes(savedTheme)) {
 const allCommands = [...Object.keys(commands), "theme", "clear", "logs"];
 const themeArgs = themeMap;
 
+const ghost = document.getElementById("ghost");
+const sizer = document.getElementById("input-sizer");
+
+function getGhostSuffix(val) {
+  const parts = val.split(/\s+/);
+  if (parts.length === 1 && parts[0]) {
+    const partial = parts[0].toLowerCase();
+    const matches = allCommands.filter(c => c.startsWith(partial));
+    if (matches.length === 1) return matches[0].slice(partial.length);
+  } else if (parts.length === 2 && parts[0].toLowerCase() === "theme") {
+    const partial = parts[1].toLowerCase();
+    const matches = themeArgs.filter(t => t.startsWith(partial));
+    if (matches.length === 1) return matches[0].slice(partial.length);
+  }
+  return "";
+}
+
+function updateGhost() {
+  const val = input.value;
+  sizer.textContent = val;
+  input.style.width = Math.max(sizer.offsetWidth, 2) + "px";
+  ghost.textContent = getGhostSuffix(val);
+}
+
+input.addEventListener("input", updateGhost);
+
 input.addEventListener("keydown", (e) => {
   if (e.key === "Tab") {
     e.preventDefault();
@@ -112,6 +138,7 @@ input.addEventListener("keydown", (e) => {
       const matches = allCommands.filter(c => c.startsWith(partial));
       if (matches.length === 1) {
         input.value = matches[0];
+        updateGhost();
       } else if (matches.length > 1) {
         print(raw, matches.join("&nbsp;&nbsp;"));
       }
@@ -120,6 +147,7 @@ input.addEventListener("keydown", (e) => {
       const matches = themeArgs.filter(t => t.startsWith(partial));
       if (matches.length === 1) {
         input.value = `theme ${matches[0]}`;
+        updateGhost();
       } else if (matches.length > 1) {
         print(raw, matches.join("&nbsp;&nbsp;"));
       }
@@ -135,6 +163,9 @@ input.addEventListener("keydown", (e) => {
   const cmdLower = raw.toLowerCase();
 
   if (!cmdLower) return;
+
+  ghost.textContent = "";
+  input.style.width = "2px";
 
   if (cmdLower === "clear") {
     output.innerHTML = "";

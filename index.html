@@ -59,7 +59,11 @@
 
     <div class="input-line">
       <span class="prompt">PS C:\Users\Moses&gt;</span>
-      <input id="cmd" type="text" autofocus />
+      <div class="autocomplete-wrapper">
+        <span id="input-sizer" class="input-sizer"></span>
+        <input id="cmd" type="text" autofocus />
+        <span id="ghost" class="ghost-text"></span>
+      </div>
     </div>
 
     <section id="output" class="output"></section>
