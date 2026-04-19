@@ -161,6 +161,9 @@ document.getElementById("cookie-accept").addEventListener("click", (e) => {
   e.stopPropagation();
   localStorage.setItem("cookie-consent", "1");
   banner.style.display = "none";
+  fetch("/api/views", { headers: { "X-Log-Consent": "1" } })
+    .then(r => r.json())
+    .then(d => { document.getElementById("view-count").textContent = d.count; });
 });
 
 document.getElementById("cookie-decline").addEventListener("click", (e) => {
