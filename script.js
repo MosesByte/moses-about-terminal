@@ -374,6 +374,7 @@ input.addEventListener("keydown", (e) => {
     localStorage.removeItem("theme");
     localStorage.removeItem("font");
     localStorage.removeItem("eggState");
+    Object.keys(eggState).forEach(k => delete eggState[k]);
     setTheme("purple");
     setFont("default");
     print(raw, `Settings reset to default.`);
