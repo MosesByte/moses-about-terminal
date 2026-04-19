@@ -27,9 +27,18 @@ const commands = {
 <span class="cmd-name">clear</span>clear terminal`,
 
   privacy: `<strong>Privacy Policy</strong><br><br>
-This website collects your IP address and visit timestamp for analytics purposes.<br>
-Data is stored securely and not shared with third parties.<br>
-Hosting: Cloudflare (US). For questions: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`,
+
+This website respects your privacy.
+
+We only count page views to understand how often the site is visited.
+No personal data is collected, stored, or analyzed.
+
+We do not store IP addresses, location data, device information, or any kind of identifying data.
+
+The view counter is used solely for general statistics and cannot be used to identify individual users.
+
+No tracking cookies or third-party tracking technologies are used.
+Hosting: Cloudflare. For questions: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`,
 
   about: `Hi`,
 
