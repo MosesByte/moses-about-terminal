@@ -19,11 +19,11 @@ const themeData = {
 };
 
 const commands = {
-  help: `<strong>about</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About me<br>
-<strong>socials</strong>&nbsp;&nbsp;&nbsp;&nbsp;Social links<br>
-<strong>linktree</strong>&nbsp;&nbsp;&nbsp;Main profiles<br>
-<strong>theme</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change theme<br>
-<strong>clear</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clear terminal`,
+  help: `<span class="cmd-name">about</span>About me<br>
+<span class="cmd-name">socials</span>social media links<br>
+<span class="cmd-name">linktree</span>some linktree´s<br>
+<span class="cmd-name">theme</span>change theme<br>
+<span class="cmd-name">clear</span>clear terminal`,
 
   about: `Hi`,
 
@@ -125,3 +125,8 @@ input.addEventListener("keydown", (e) => {
 
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
+
+fetch("https://api.counterapi.dev/v1/moses-wtf/views/up")
+  .then(r => r.json())
+  .then(d => { document.getElementById("view-count").textContent = d.count; })
+  .catch(() => { document.getElementById("view-count").textContent = "N/A"; });
