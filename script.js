@@ -320,12 +320,32 @@ input.addEventListener("keydown", (e) => {
   }
 
   if (base === "logs") {
-    const pw = parts[1];
+    const pw     = parts[1];
+    const action = parts[2];
+    const target = parts[3];
     if (!pw) {
-      print(raw, `Usage: <strong>logs</strong> &lt;password&gt;`);
+      print(raw, `Usage: <strong>logs</strong> &lt;password&gt;<br>Usage: <strong>logs</strong> &lt;password&gt; delete &lt;username&gt;`);
       input.value = "";
       return;
     }
+
+    if (action === "delete" && target) {
+      print(raw, `Deleting entries from <strong>${target}</strong>...`);
+      fetch(`/api/guestbook?key=${encodeURIComponent(pw)}&name=${encodeURIComponent(target)}`, { method: "DELETE" })
+        .then(r => { if (r.status === 401) throw new Error("Unauthorized"); return r.json(); })
+        .then(d => {
+          const last = output.lastElementChild;
+          if (last) last.querySelector(".response-line").innerHTML =
+            `Removed <strong>${d.removed}</strong> entr${d.removed !== 1 ? "ies" : "y"} from <strong>${target}</strong>`;
+        })
+        .catch(err => {
+          const last = output.lastElementChild;
+          if (last) last.querySelector(".response-line").textContent = err.message;
+        });
+      input.value = "";
+      return;
+    }
+
     print(raw, "Fetching logs...");
     fetch(`/api/logs?key=${encodeURIComponent(pw)}`)
       .then(r => {
