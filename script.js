@@ -97,7 +97,36 @@ if (savedTheme && themeMap.includes(savedTheme)) {
   setTheme("purple");
 }
 
+const allCommands = [...Object.keys(commands), "theme", "clear", "logs"];
+const themeArgs = themeMap;
+
 input.addEventListener("keydown", (e) => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const raw = input.value;
+    const parts = raw.split(/\s+/);
+
+    if (parts.length === 1) {
+      const partial = parts[0].toLowerCase();
+      if (!partial) return;
+      const matches = allCommands.filter(c => c.startsWith(partial));
+      if (matches.length === 1) {
+        input.value = matches[0];
+      } else if (matches.length > 1) {
+        print(raw, matches.join("&nbsp;&nbsp;"));
+      }
+    } else if (parts.length === 2 && parts[0].toLowerCase() === "theme") {
+      const partial = parts[1].toLowerCase();
+      const matches = themeArgs.filter(t => t.startsWith(partial));
+      if (matches.length === 1) {
+        input.value = `theme ${matches[0]}`;
+      } else if (matches.length > 1) {
+        print(raw, matches.join("&nbsp;&nbsp;"));
+      }
+    }
+    return;
+  }
+
   if (e.key !== "Enter") return;
 
   e.preventDefault();
