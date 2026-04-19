@@ -31,8 +31,10 @@ body {
   background: rgba(0, 0, 0, 0.87);
   border-radius: 12px;
   padding: 22px 24px 26px;
-  border: 1px solid rgba(168,85,247,0.18);
-  box-shadow: 0 0 50px rgba(168,85,247,0.12);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  box-shadow:
+  0 0 0 1px rgba(168, 85, 247, 0.15),
+  0 0 40px rgba(168, 85, 247, 0.12);
 }
 
 .titlebar {
