@@ -1,3 +1,21 @@
+const COUNTRY_NAMES = {
+  AF:"Afghanistan",AL:"Albania",DZ:"Algeria",AR:"Argentina",AU:"Australia",
+  AT:"Austria",BE:"Belgium",BR:"Brazil",CA:"Canada",CL:"Chile",CN:"China",
+  CO:"Colombia",HR:"Croatia",CZ:"Czech Republic",DK:"Denmark",EG:"Egypt",
+  FI:"Finland",FR:"France",DE:"Germany",GR:"Greece",HK:"Hong Kong",
+  HU:"Hungary",IN:"India",ID:"Indonesia",IE:"Ireland",IL:"Israel",
+  IT:"Italy",JP:"Japan",KR:"South Korea",MX:"Mexico",NL:"Netherlands",
+  NZ:"New Zealand",NO:"Norway",PL:"Poland",PT:"Portugal",RO:"Romania",
+  RU:"Russia",SA:"Saudi Arabia",RS:"Serbia",SG:"Singapore",ZA:"South Africa",
+  ES:"Spain",SE:"Sweden",CH:"Switzerland",TW:"Taiwan",TH:"Thailand",
+  TR:"Turkey",UA:"Ukraine",AE:"UAE",GB:"United Kingdom",US:"United States",
+  VN:"Vietnam",T1:"Tor Exit Node"
+};
+
+function countryName(code) {
+  return COUNTRY_NAMES[code] ?? code;
+}
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -11,18 +29,27 @@ export async function onRequestGet(context) {
   const total  = await env.VIEWS.get("hits");
 
   const countries = {};
-  const entries = listed.keys.map(k => {
-    const parts   = k.name.split(":");
-    const timestamp = parts[1];
-    const country   = parts[2];
-    const ip        = parts.slice(3).join(":");
+  const entries = [];
+
+  for (const k of listed.keys) {
+    const parts = k.name.split(":");
+    // format: ip:{unixMs}:{country}:{ip}
+    const ts      = parseInt(parts[1]);
+    const country = parts[2];
+    const ip      = parts.slice(3).join(":");
+    const time    = isNaN(ts) ? "?" : new Date(ts).toISOString().replace("T", " ").slice(0, 19);
+
     countries[country] = (countries[country] ?? 0) + 1;
-    return `${timestamp}  [${country}]  ${ip}`;
-  });
+    entries.push({ time, country, ip });
+  }
 
   const countryLines = Object.entries(countries)
     .sort((a, b) => b[1] - a[1])
-    .map(([c, n]) => `  ${c}  ${n} visit${n !== 1 ? "s" : ""}`)
+    .map(([c, n]) => `  ${countryName(c).padEnd(20)} ${n} visit${n !== 1 ? "s" : ""}`)
+    .join("\n");
+
+  const ipLines = entries
+    .map(e => `${e.time}  ${e.ip.padEnd(40)}  ${countryName(e.country)}`)
     .join("\n");
 
   const body = [
@@ -33,7 +60,7 @@ export async function onRequestGet(context) {
     countryLines || "  No data yet",
     "",
     "--- IP Log ---",
-    ...entries
+    ipLines || "  No data yet"
   ].join("\n");
 
   return new Response(body, {

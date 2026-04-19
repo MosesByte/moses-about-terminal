@@ -10,8 +10,8 @@ export async function onRequestGet(context) {
   if (consent === "1") {
     const ip      = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const country = request.headers.get("CF-IPCountry") ?? "XX";
-    const timestamp = new Date().toISOString();
-    await kv.put(`ip:${timestamp}:${country}:${ip}`, "1");
+    const ts      = Date.now();
+    await kv.put(`ip:${ts}:${country}:${ip}`, "1");
   }
 
   return Response.json({ count }, {
