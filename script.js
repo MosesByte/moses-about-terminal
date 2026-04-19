@@ -57,6 +57,17 @@ const cmdList = ["help","about","socials","linktree","theme","neofetch","music",
 
 const cmdHistory = [];
 let historyIndex = -1;
+let lastSuggestion = null;
+
+function levenshtein(a, b) {
+  const dp = Array.from({ length: a.length + 1 }, (_, i) =>
+    Array.from({ length: b.length + 1 }, (_, j) => i === 0 ? j : j === 0 ? i : 0)
+  );
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[a.length][b.length];
+}
 
 function setTheme(theme) {
   document.body.classList.remove("theme-purple", "theme-red", "theme-blue");
@@ -120,11 +131,17 @@ function updateGhost() {
   ghost.textContent = getGhostSuffix(val);
 }
 
-input.addEventListener("input", updateGhost);
+input.addEventListener("input", () => { lastSuggestion = null; updateGhost(); });
 
 input.addEventListener("keydown", (e) => {
   if (e.key === "Tab") {
     e.preventDefault();
+    if (!input.value && lastSuggestion) {
+      input.value = lastSuggestion;
+      lastSuggestion = null;
+      updateGhost();
+      return;
+    }
     const raw = input.value;
     const parts = raw.split(/\s+/);
     if (parts.length === 1) {
@@ -296,9 +313,39 @@ input.addEventListener("keydown", (e) => {
     return;
   }
 
-  const res = commands[base] || "Unknown command";
-  print(raw, res);
+  if (commands[base]) {
+    print(raw, commands[base]);
+  } else {
+    const closest = allCommands.reduce((best, c) => {
+      const d = levenshtein(base, c);
+      return d < best.d ? { cmd: c, d } : best;
+    }, { cmd: null, d: Infinity });
+    if (closest.d <= 2) {
+      lastSuggestion = closest.cmd;
+      print(raw, `command not found<br>did you mean: <span class="did-you-mean">${closest.cmd}</span>? <span class="tab-hint">(Tab)</span>`);
+    } else {
+      print(raw, "Unknown command");
+    }
+  }
   input.value = "";
+});
+
+document.querySelectorAll(".hint-btn").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    input.value = btn.dataset.cmd;
+    input.focus();
+    updateGhost();
+  });
+});
+
+output.addEventListener("click", e => {
+  if (e.target.classList.contains("did-you-mean")) {
+    input.value = e.target.textContent;
+    lastSuggestion = null;
+    input.focus();
+    updateGhost();
+  }
 });
 
 document.addEventListener("click", () => input.focus());
