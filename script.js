@@ -26,9 +26,13 @@ const commands = {
 
   about: `Hi`,
 
-  socials: `<strong>guns.lol:</strong> <a href="https://guns.lol/moses76" target="_blank" rel="noopener noreferrer">moses76</a><br>
-<strong>fakecrime.bio:</strong> <a href="https://fakecrime.bio/moses76" target="_blank" rel="noopener noreferrer">moses76</a><br>
-<strong>ysn.lol:</strong> <a href="https://ysn.lol/moses" target="_blank" rel="noopener noreferrer">moses</a>`,
+  socials: `<strong>guns.lol:</strong> <a href="https://guns.lol/moses" target="_blank" rel="noopener noreferrer">moses</a><br>
+    <strong>Instagram:</strong> <a href="https://instagram.com/mosesdercutter" target="_blank" rel="noopener noreferrer">mosesdercutter</a><br>
+    <strong>Steam:</strong> <a href="https://steamcommunity.com/id/schwarzepillen" target="_blank" rel="noopener noreferrer">game main</a><br>
+    <strong>Steam:</strong> <a href="https://steamcommunity.com/id/Affenfleisch" target="_blank" rel="noopener noreferrer">alt 1</a><br>
+    <strong>Steam:</strong> <a href="https://steamcommunity.com/id/BlauePillen" target="_blank" rel="noopener noreferrer">alt 2</a><br>
+    <strong>Git:</strong> <a href="https://github.com/MosesByte" target="_blank" rel="noopener noreferrer">mosesbyte</a><br>
+  `,
 
   linktree: `<strong>fakecrime.bio</strong><br>
 karlsruhe&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/karlsruhe" target="_blank" rel="noopener noreferrer">fakecrime.bio/karlsruhe</a><br>
