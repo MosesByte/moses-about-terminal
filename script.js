@@ -406,6 +406,97 @@ output.addEventListener("click", e => {
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
 
+// ── Guestbook ────────────────────────���─────────────────────────────────────
+const gbToggle  = document.getElementById("gb-toggle");
+const gbPanel   = document.getElementById("gb-panel");
+const gbEntries = document.getElementById("gb-entries");
+const gbCount   = document.getElementById("gb-count");
+const gbName    = document.getElementById("gb-name");
+const gbMessage = document.getElementById("gb-message");
+const gbSubmit  = document.getElementById("gb-submit");
+let gbOpen = false;
+
+function escapeHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function renderEntries(entries) {
+  gbCount.textContent = entries.length ? `${entries.length} signature${entries.length !== 1 ? "s" : ""}` : "";
+  if (!entries.length) {
+    gbEntries.innerHTML = '<div class="gb-empty">no signatures yet — be the first</div>';
+    return;
+  }
+  gbEntries.innerHTML = entries.map(e => {
+    const date = new Date(e.ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return `<div class="gb-entry">
+      <div class="gb-entry-header">
+        <span class="gb-entry-prompt">&gt;</span>
+        <span class="gb-entry-name">${escapeHtml(e.name)}</span>
+        <span class="gb-entry-date">${date}</span>
+      </div>
+      <div class="gb-entry-msg">${escapeHtml(e.message)}</div>
+    </div>`;
+  }).join("");
+}
+
+async function fetchEntries() {
+  gbEntries.innerHTML = '<div class="gb-loading">loading...</div>';
+  try {
+    const res  = await fetch("/api/guestbook");
+    const data = await res.json();
+    renderEntries(data);
+  } catch {
+    gbEntries.innerHTML = '<div class="gb-empty">could not load entries</div>';
+  }
+}
+
+function toggleGuestbook() {
+  gbOpen = !gbOpen;
+  gbPanel.classList.toggle("open", gbOpen);
+  if (gbOpen) fetchEntries();
+}
+
+gbToggle.addEventListener("click", e => {
+  e.stopPropagation();
+  toggleGuestbook();
+});
+
+document.addEventListener("click", e => {
+  if (gbOpen && !gbPanel.contains(e.target) && !gbToggle.contains(e.target)) {
+    gbOpen = false;
+    gbPanel.classList.remove("open");
+  }
+});
+
+async function submitEntry() {
+  const name    = gbName.value.trim();
+  const message = gbMessage.value.trim();
+  if (!name || !message) return;
+
+  gbSubmit.textContent = "[signing...]";
+  gbSubmit.disabled    = true;
+
+  try {
+    const res = await fetch("/api/guestbook", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ name, message })
+    });
+    if (res.ok) {
+      gbName.value    = "";
+      gbMessage.value = "";
+      await fetchEntries();
+    }
+  } catch {}
+
+  gbSubmit.textContent = "[sign]";
+  gbSubmit.disabled    = false;
+}
+
+gbSubmit.addEventListener("click", submitEntry);
+gbMessage.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); submitEntry(); } });
+gbName.addEventListener("keydown",    e => { if (e.key === "Enter") { e.preventDefault(); gbMessage.focus(); } });
+
 // ── Easter Egg System ──────────────────────────────────────────────────────
 const EGG_TOTAL = 2;
 const eggState  = JSON.parse(localStorage.getItem("eggState") || "{}");
@@ -505,6 +596,15 @@ function restoreTerminal() {
     input.focus();
   }, 150);
 }
+
+setTimeout(() => {
+  document.getElementById("egg-hint").classList.add("visible");
+}, 30000);
+
+document.getElementById("egg-hint-close").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("egg-hint").classList.remove("visible");
+});
 
 document.getElementById("dot-yellow").addEventListener("click", e => {
   e.stopPropagation();
