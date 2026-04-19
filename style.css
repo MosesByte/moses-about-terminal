@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  background: #000;
+  color: #cd4747;
+  font-family: Consolas, monospace;
+  overflow: hidden;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(120,0,0,.4), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(120,0,0,.3), transparent 40%),
+    #000;
+  filter: blur(12px);
+  transform: scale(1.1);
+}
+
+.terminal {
+  position: relative;
+  width: 900px;
+  max-width: 92%;
+  height: 700px;
+  margin: 60px auto;
+  background: rgba(0,0,0,.85);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.title {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.hero {
+  display: flex;
+  gap: 30px;
+}
+
+.ascii {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.info h1 {
+  margin: 0 0 10px 0;
+}
+
+.input {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+input {
+  background: none;
+  border: none;
+  color: #cd4747;
+  flex: 1;
+  outline: none;
+  font: inherit;
+}
+
+#output {
+  margin-top: 20px;
+  font-size: 13px;
+}
