@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moses.wtf</title>
-  <link rel="stylesheet" href="style.css?v=6" />
+<link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
   <div class="bg"></div>
@@ -16,39 +16,40 @@
         <span class="dot yellow"></span>
         <span class="dot green"></span>
       </div>
-
       <span class="title">MOSES TERMINAL</span>
     </div>
 
     <section class="hero">
-      <pre class="ascii">
-███╗   ███╗ ██████╗ ███████╗███████╗███████╗
+      <div class="hero-left">
+        <pre class="ascii">███╗   ███╗ ██████╗ ███████╗███████╗███████╗
 ████╗ ████║██╔═══██╗██╔════╝██╔════╝██╔════╝
 ██╔████╔██║██║   ██║███████╗█████╗  ███████╗
 ██║╚██╔╝██║██║   ██║╚════██║██╔══╝  ╚════██║
 ██║ ╚═╝ ██║╚██████╔╝███████║███████╗███████║
-╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚══════╝
-      </pre>
+╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚══════╝</pre>
 
-      <div class="hero-name">
-        <h1>moses.wtf</h1>
+        <h1 class="main-title">moses.wtf</h1>
+      </div>
+
+      <div class="hero-right">
+        <p class="welcome-title">moses@web ~</p>
         <div class="divider"></div>
 
-        <div class="info-block">
-          <p><span class="label">Host:</span> Cloudflare</p>
-          <p><span class="label">User:</span> Moses</p>
-          <p><span class="label">Theme:</span> Purple</p>
-          <p><span class="label">Type:</span> "help"</p>
-        </div>
+        <p><span class="label">Welcome:</span> Welcome to my page.</p>
+        <p><span class="label">Host:</span> Cloudflare</p>
+        <p><span class="label">User:</span> Moses</p>
+        <p><span class="label">Theme:</span> Purple</p>
+
+        <p class="help-hint">Type <span class="label">"help"</span> to get started.</p>
       </div>
     </section>
 
-    <section id="output" class="output"></section>
+<div class="input-line">
+  <span class="prompt">PS C:\Users\Moses></span>
+  <input id="cmd" type="text" autofocus />
+</div>
 
-    <div class="input-line">
-      <span class="prompt">PS C:\Users\Moses&gt;</span>
-      <input id="cmd" type="text" autofocus />
-    </div>
+<section id="output" class="output"></section>
   </main>
 
   <script src="script.js"></script>

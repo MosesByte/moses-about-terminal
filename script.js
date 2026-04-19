@@ -9,28 +9,23 @@ const commands = {
 
   about: `Hi, ich bin Moses.<br>Willkommen auf meiner Seite.`,
 
-  socials: `<strong>guns.lol:</strong> <a href="https://guns.lol/moses" target="_blank">moses</a><br>
-<strong>fakecrime.bio:</strong> <a href="https://fakecrime.bio/moses76" target="_blank">moses76</a><br>
-<strong>ysn.lol:</strong> <a href="https://ysn.lol/moses" target="_blank">moses</a><br>
-<strong>Instagram:</strong> <a href="https://www.instagram.com/mosesdercutter" target="_blank">mosesdercutter</a><br>
-<strong>Steam:</strong> <a href="https://steamcommunity.com/id/SchwarzePillen/" target="_blank">game main</a><br>
-<strong>Steam:</strong> <a href="https://steamcommunity.com/id/Affenfleisch/" target="_blank">alt 1</a><br>
-<strong>Steam:</strong> <a href="https://steamcommunity.com/id/BlauePillen/" target="_blank">alt 2</a>
-`,
+  socials: `<strong>guns.lol:</strong> <a href="https://guns.lol/moses76" target="_blank" rel="noopener noreferrer">moses76</a><br>
+<strong>fakecrime.bio:</strong> <a href="https://fakecrime.bio/moses76" target="_blank" rel="noopener noreferrer">moses76</a><br>
+<strong>ysn.lol:</strong> <a href="https://ysn.lol/moses" target="_blank" rel="noopener noreferrer">moses</a>`,
 
   linktree: `<strong>fakecrime.bio</strong><br>
-karlsruhe&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/karlsruhe" target="_blank">fakecrime.bio/karlsruhe</a><br>
-cannabis&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/cannabis" target="_blank">fakecrime.bio/cannabis</a><br>
-moses76&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/moses76" target="_blank">fakecrime.bio/moses76</a><br><br>
+karlsruhe&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/karlsruhe" target="_blank" rel="noopener noreferrer">fakecrime.bio/karlsruhe</a><br>
+cannabis&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/cannabis" target="_blank" rel="noopener noreferrer">fakecrime.bio/cannabis</a><br>
+moses76&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/moses76" target="_blank" rel="noopener noreferrer">fakecrime.bio/moses76</a><br><br>
 
 <strong>guns.lol</strong><br>
-moses76&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://guns.lol/moses76" target="_blank">guns.lol/moses76</a><br><br>
+moses76&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://guns.lol/moses76" target="_blank" rel="noopener noreferrer">guns.lol/moses76</a><br><br>
 
 <strong>ysn.lol</strong><br>
-8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/8" target="_blank">ysn.lol/8</a><br>
-moses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/moses" target="_blank">ysn.lol/moses</a><br>
-neverlose&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/neverlose" target="_blank">ysn.lol/neverlose</a><br>
-fatality&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/fatality" target="_blank">ysn.lol/fatality</a>`
+8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/8" target="_blank" rel="noopener noreferrer">ysn.lol/8</a><br>
+moses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/moses" target="_blank" rel="noopener noreferrer">ysn.lol/moses</a><br>
+neverlose&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/neverlose" target="_blank" rel="noopener noreferrer">ysn.lol/neverlose</a><br>
+fatality&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/fatality" target="_blank" rel="noopener noreferrer">ysn.lol/fatality</a>`
 };
 
 function print(cmd, res) {
