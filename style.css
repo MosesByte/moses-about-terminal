@@ -262,9 +262,25 @@ body {
   color: var(--text-main);
 }
 
-input {
+.autocomplete-wrapper {
   flex: 1;
+  display: flex;
+  align-items: center;
   min-width: 0;
+  position: relative;
+}
+
+.input-sizer {
+  position: absolute;
+  visibility: hidden;
+  white-space: pre;
+  font: inherit;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+input {
+  width: 2px;
   background: transparent;
   border: none;
   outline: none;
@@ -273,6 +289,16 @@ input {
   font-size: 15px;
   caret-color: var(--text-strong);
   padding: 0 0 0 2px;
+}
+
+.ghost-text {
+  color: var(--text-muted);
+  opacity: 0.4;
+  font: inherit;
+  font-size: 15px;
+  pointer-events: none;
+  white-space: pre;
+  user-select: none;
 }
 
 .output::-webkit-scrollbar {
@@ -319,6 +345,8 @@ input {
   .hero-right p,
   .prompt,
   input,
+  .ghost-text,
+  .input-sizer,
   .output {
     font-size: 14px;
   }

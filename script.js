@@ -88,50 +88,42 @@ if (savedTheme && themeMap.includes(savedTheme)) {
   setTheme("purple");
 }
 
+const allCommands = [...Object.keys(commands), "theme", "clear", "logs"];
+const themeArgs = themeMap;
+
+const ghost = document.getElementById("ghost");
+const sizer = document.getElementById("input-sizer");
+
+function getGhostSuffix(val) {
+  const parts = val.split(/\s+/);
+  if (parts.length === 1 && parts[0]) {
+    const partial = parts[0].toLowerCase();
+    const matches = allCommands.filter(c => c.startsWith(partial));
+    if (matches.length === 1) return matches[0].slice(partial.length);
+  } else if (parts.length === 2 && parts[0].toLowerCase() === "theme") {
+    const partial = parts[1].toLowerCase();
+    const matches = themeArgs.filter(t => t.startsWith(partial));
+    if (matches.length === 1) return matches[0].slice(partial.length);
+  }
+  return "";
+}
+
+function updateGhost() {
+  const val = input.value;
+  sizer.textContent = val;
+  input.style.width = Math.max(sizer.offsetWidth, 2) + "px";
+  ghost.textContent = getGhostSuffix(val);
+}
+
+input.addEventListener("input", updateGhost);
+
 input.addEventListener("keydown", (e) => {
-  if (e.key === "Tab") {
-    e.preventDefault();
-    const partial = input.value.toLowerCase().trim();
-    if (!partial) return;
-    const matches = cmdList.filter(c => c.startsWith(partial));
-    if (matches.length === 1) {
-      input.value = matches[0];
-    } else if (matches.length > 1) {
-      print(partial, matches.join("&nbsp;&nbsp;"));
-    }
-    return;
-  }
-
-  if (e.key === "ArrowUp") {
-    e.preventDefault();
-    if (historyIndex < cmdHistory.length - 1) {
-      historyIndex++;
-      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
-    }
-    return;
-  }
-
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    if (historyIndex > 0) {
-      historyIndex--;
-      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
-    } else {
-      historyIndex = -1;
-      input.value = "";
-    }
-    return;
-  }
-
   if (e.key !== "Enter") return;
   e.preventDefault();
 
   const raw = input.value.trim();
   const cmdLower = raw.toLowerCase();
   if (!cmdLower) return;
-
-  cmdHistory.push(raw);
-  historyIndex = -1;
 
   if (cmdLower === "clear") {
     output.innerHTML = "";
