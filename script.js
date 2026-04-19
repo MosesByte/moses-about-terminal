@@ -126,7 +126,7 @@ input.addEventListener("keydown", (e) => {
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
 
-fetch("https://api.counterapi.dev/v1/moses-wtf/views/up")
+fetch("/api/views")
   .then(r => r.json())
   .then(d => { document.getElementById("view-count").textContent = d.count; })
   .catch(() => { document.getElementById("view-count").textContent = "N/A"; });
