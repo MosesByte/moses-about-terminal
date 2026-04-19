@@ -23,7 +23,13 @@ const commands = {
 <span class="cmd-name">socials</span>social media links<br>
 <span class="cmd-name">linktree</span>some linktree´s<br>
 <span class="cmd-name">theme</span>change theme<br>
+<span class="cmd-name">privacy</span>privacy policy<br>
 <span class="cmd-name">clear</span>clear terminal`,
+
+  privacy: `<strong>Privacy Policy</strong><br><br>
+This website collects your IP address and visit timestamp for analytics purposes.<br>
+Data is stored securely and not shared with third parties.<br>
+Hosting: Cloudflare (US). For questions: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`,
 
   about: `Hi`,
 
@@ -152,30 +158,7 @@ input.addEventListener("keydown", (e) => {
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
 
-const banner = document.getElementById("cookie-banner");
-if (localStorage.getItem("cookie-consent") !== null) {
-  banner.style.display = "none";
-}
-
-document.getElementById("cookie-accept").addEventListener("click", (e) => {
-  e.stopPropagation();
-  localStorage.setItem("cookie-consent", "1");
-  banner.style.display = "none";
-  fetch("/api/views", { headers: { "X-Log-Consent": "1" } })
-    .then(r => r.json())
-    .then(d => { document.getElementById("view-count").textContent = d.count; });
-});
-
-document.getElementById("cookie-decline").addEventListener("click", (e) => {
-  e.stopPropagation();
-  localStorage.setItem("cookie-consent", "0");
-  banner.style.display = "none";
-});
-
-const hasConsent = localStorage.getItem("cookie-consent") === "1";
-fetch("/api/views", {
-  headers: hasConsent ? { "X-Log-Consent": "1" } : {}
-})
+fetch("/api/views", { headers: { "X-Log-Consent": "1" } })
   .then(r => r.json())
   .then(d => { document.getElementById("view-count").textContent = d.count; })
   .catch(() => { document.getElementById("view-count").textContent = "N/A"; });
