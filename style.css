@@ -141,7 +141,23 @@ body {
 
 .response-line {
   color: #a855f7;
-  white-space: pre-wrap;
+  line-height: 1.9;
+}
+
+.response-line strong {
+  color: #d8b4fe;
+  font-weight: 700;
+}
+
+.response-line a {
+  color: inherit;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.response-line a:hover {
+  color: #d8b4fe;
+  text-decoration: underline;
 }
 
 .input-line {
