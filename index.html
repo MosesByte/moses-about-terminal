@@ -2,6 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moses.wtf</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -9,10 +10,13 @@
 
 <div class="bg"></div>
 
-<main class="terminal">
-  <div class="title">FURYON TERMINAL</div>
+<main class="terminal" id="terminal">
 
-  <div class="hero">
+  <div class="titlebar">
+    <span>MOSES TERMINAL</span>
+  </div>
+
+  <section class="hero">
     <pre class="ascii">
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣶⣦⡀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣷
@@ -24,20 +28,20 @@
 
     <div class="info">
       <h1>moses.wtf</h1>
-      <p>Welcome: cutie cutie</p>
       <p>Host: Cloudflare</p>
       <p>User: Moses</p>
-      <p>Theme: #CD4747</p>
-      <p>Type "help" to start</p>
+      <p>Theme: Purple</p>
+      <p>Type "help"</p>
     </div>
-  </div>
+  </section>
 
-  <div id="output"></div>
+  <section id="output" class="output"></section>
 
-  <div class="input">
+  <div class="input-line">
     <span>PS C:\Users\Moses&gt;</span>
     <input id="cmd" autofocus />
   </div>
+
 </main>
 
 <script src="script.js"></script>

@@ -1,36 +1,38 @@
 body {
   margin: 0;
-  background: #000;
-  color: #cd4747;
+  background: #0f0a19;
+  color: #a855f7;
   font-family: Consolas, monospace;
   overflow: hidden;
 }
 
+/* Background Glow */
 .bg {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 20%, rgba(120,0,0,.4), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(120,0,0,.3), transparent 40%),
-    #000;
-  filter: blur(12px);
-  transform: scale(1.1);
+    radial-gradient(circle at 20% 20%, rgba(168,85,247,.4), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,.25), transparent 40%),
+    #0f0a19;
+  filter: blur(14px);
 }
 
+/* Terminal Box */
 .terminal {
-  position: relative;
   width: 900px;
   max-width: 92%;
   height: 700px;
   margin: 60px auto;
   background: rgba(0,0,0,.85);
-  border: 1px solid rgba(255,255,255,.1);
   border-radius: 10px;
   padding: 20px;
+
+  border: 1px solid rgba(168,85,247,0.2);
+  box-shadow: 0 0 30px rgba(168,85,247,0.2);
 }
 
-.title {
-  color: #888;
+.titlebar {
+  color: #aaa;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -49,7 +51,14 @@ body {
   margin: 0 0 10px 0;
 }
 
-.input {
+/* Output */
+.output {
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+/* Input */
+.input-line {
   display: flex;
   gap: 10px;
   margin-top: 20px;
@@ -58,13 +67,9 @@ body {
 input {
   background: none;
   border: none;
-  color: #cd4747;
+  color: #a855f7;
   flex: 1;
   outline: none;
   font: inherit;
-}
-
-#output {
-  margin-top: 20px;
-  font-size: 13px;
+  caret-color: #a855f7;
 }

@@ -3,9 +3,9 @@ const output = document.getElementById("output");
 
 const commands = {
   help: `about      About me
-socials    My links
-whoami     Current user
-date       Current time
+socials    Links
+whoami     User info
+date       Time
 clear      Clear terminal`,
 
   about: "Ich bin Moses.",
@@ -21,9 +21,9 @@ function print(cmd, res) {
   `;
 }
 
-input.addEventListener("keydown", function(e) {
+input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    e.preventDefault(); // WICHTIG
+    e.preventDefault();
 
     const cmd = input.value.trim();
 
@@ -47,9 +47,6 @@ input.addEventListener("keydown", function(e) {
   }
 });
 
-
-// 🔥 DAS IST DER WICHTIGE PART
-// sorgt dafür dass du IMMER tippen kannst
-
+// Fokus fix
 document.addEventListener("click", () => input.focus());
 window.onload = () => input.focus();
