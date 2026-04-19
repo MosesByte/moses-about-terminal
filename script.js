@@ -126,7 +126,10 @@ input.addEventListener("keydown", (e) => {
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
 
-fetch("/api/views")
+const hasConsent = localStorage.getItem("cookie-consent") === "1";
+fetch("/api/views", {
+  headers: hasConsent ? { "X-Log-Consent": "1" } : {}
+})
   .then(r => r.json())
   .then(d => { document.getElementById("view-count").textContent = d.count; })
   .catch(() => { document.getElementById("view-count").textContent = "N/A"; });
