@@ -25,17 +25,18 @@ body {
   position: relative;
   z-index: 1;
 
-  width: 900px;
-  max-width: 92%;
-  height: 700px;
-  margin: 60px auto;
+  width: 1200px;          /* größer */
+  max-width: 95%;
+
+  height: 80vh;           /* dynamisch nach Bildschirm */
+  margin: 40px auto;
 
   background: rgba(0,0,0,.85);
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 30px;
 
-  border: 1px solid rgba(168,85,247,0.2);
-  box-shadow: 0 0 30px rgba(168,85,247,0.2);
+  border: 1px solid rgba(168,85,247,0.25);
+  box-shadow: 0 0 50px rgba(168,85,247,0.25);
 }
 
 .titlebar {
@@ -46,7 +47,7 @@ body {
 
 .hero {
   display: flex;
-  gap: 30px;
+  gap: 50px;
 }
 
 .ascii {
@@ -55,7 +56,7 @@ body {
 }
 
 .info h1 {
-  margin: 0 0 10px 0;
+  font-size: 28px;
 }
 
 /* Output */
