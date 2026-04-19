@@ -1,44 +1,28 @@
 const input = document.getElementById("cmd");
 const output = document.getElementById("output");
 
+const LASTFM_USER = "";
+const LASTFM_KEY  = "";
+
 const themeMap = ["purple", "red", "blue"];
 
 const themeData = {
-  purple: {
-    rgb: "185, 140, 247",
-    hex: "#B98CF7"
-  },
-  red: {
-    rgb: "205, 71, 71",
-    hex: "#CD4747"
-  },
-  blue: {
-    rgb: "77, 166, 255",
-    hex: "#4DA6FF"
-  }
+  purple: { rgb: "185, 140, 247", hex: "#B98CF7" },
+  red:    { rgb: "205, 71, 71",   hex: "#CD4747" },
+  blue:   { rgb: "77, 166, 255",  hex: "#4DA6FF" }
 };
 
 const commands = {
   help: `<span class="cmd-name">about</span>About me<br>
-<span class="cmd-name">socials</span>social media links<br>
-<span class="cmd-name">linktree</span>some linktree´s<br>
-<span class="cmd-name">theme</span>change theme<br>
-<span class="cmd-name">privacy</span>privacy policy<br>
-<span class="cmd-name">clear</span>clear terminal`,
-
-  privacy: `<strong>Privacy Policy</strong><br><br>
-
-This website respects your privacy.
-
-We only count page views to understand how often the site is visited.
-No personal data is collected, stored, or analyzed.
-
-We do not store IP addresses, location data, device information, or any kind of identifying data.
-
-The view counter is used solely for general statistics and cannot be used to identify individual users.
-
-No tracking cookies or third-party tracking technologies are used.
-Hosting: Cloudflare. For questions: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`,
+<span class="cmd-name">socials</span>Social media links<br>
+<span class="cmd-name">linktree</span>Link profiles<br>
+<span class="cmd-name">theme</span>Change theme<br>
+<span class="cmd-name">neofetch</span>System info<br>
+<span class="cmd-name">music</span>Now playing<br>
+<span class="cmd-name">time</span>Current time<br>
+<span class="cmd-name">date</span>Current date<br>
+<span class="cmd-name">privacy</span>Privacy policy<br>
+<span class="cmd-name">clear</span>Clear terminal`,
 
   about: `Hi`,
 
@@ -50,16 +34,24 @@ Hosting: Cloudflare. For questions: <a href="mailto:contact@moses.wtf">contact@m
 karlsruhe&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/karlsruhe" target="_blank" rel="noopener noreferrer">fakecrime.bio/karlsruhe</a><br>
 cannabis&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/cannabis" target="_blank" rel="noopener noreferrer">fakecrime.bio/cannabis</a><br>
 moses76&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://fakecrime.bio/moses76" target="_blank" rel="noopener noreferrer">fakecrime.bio/moses76</a><br><br>
-
 <strong>guns.lol</strong><br>
 moses76&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://guns.lol/moses76" target="_blank" rel="noopener noreferrer">guns.lol/moses76</a><br><br>
-
 <strong>ysn.lol</strong><br>
 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/8" target="_blank" rel="noopener noreferrer">ysn.lol/8</a><br>
 moses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/moses" target="_blank" rel="noopener noreferrer">ysn.lol/moses</a><br>
 neverlose&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/neverlose" target="_blank" rel="noopener noreferrer">ysn.lol/neverlose</a><br>
-fatality&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/fatality" target="_blank" rel="noopener noreferrer">ysn.lol/fatality</a>`
+fatality&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/fatality" target="_blank" rel="noopener noreferrer">ysn.lol/fatality</a>`,
+
+  privacy: `<strong>Privacy Policy</strong><br><br>
+This website collects your IP address and visit timestamp for analytics purposes.<br>
+Data is stored securely and not shared with third parties.<br>
+Hosting: Cloudflare (US). Contact: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`
 };
+
+const cmdList = ["help","about","socials","linktree","theme","neofetch","music","time","date","privacy","logs","clear"];
+
+const cmdHistory = [];
+let historyIndex = -1;
 
 function setTheme(theme) {
   document.body.classList.remove("theme-purple", "theme-red", "theme-blue");
@@ -86,7 +78,6 @@ function print(cmd, res) {
   entry.appendChild(commandLine);
   entry.appendChild(responseLine);
   output.appendChild(entry);
-
   output.scrollTop = output.scrollHeight;
 }
 
@@ -98,14 +89,49 @@ if (savedTheme && themeMap.includes(savedTheme)) {
 }
 
 input.addEventListener("keydown", (e) => {
-  if (e.key !== "Enter") return;
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const partial = input.value.toLowerCase().trim();
+    if (!partial) return;
+    const matches = cmdList.filter(c => c.startsWith(partial));
+    if (matches.length === 1) {
+      input.value = matches[0];
+    } else if (matches.length > 1) {
+      print(partial, matches.join("&nbsp;&nbsp;"));
+    }
+    return;
+  }
 
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    if (historyIndex < cmdHistory.length - 1) {
+      historyIndex++;
+      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+    }
+    return;
+  }
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (historyIndex > 0) {
+      historyIndex--;
+      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+    } else {
+      historyIndex = -1;
+      input.value = "";
+    }
+    return;
+  }
+
+  if (e.key !== "Enter") return;
   e.preventDefault();
 
   const raw = input.value.trim();
   const cmdLower = raw.toLowerCase();
-
   if (!cmdLower) return;
+
+  cmdHistory.push(raw);
+  historyIndex = -1;
 
   if (cmdLower === "clear") {
     output.innerHTML = "";
@@ -116,6 +142,74 @@ input.addEventListener("keydown", (e) => {
   const parts = raw.split(/\s+/);
   const base = parts[0].toLowerCase();
   const arg = parts[1] ? parts[1].toLowerCase() : "";
+
+  if (base === "time") {
+    print(raw, new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    input.value = "";
+    return;
+  }
+
+  if (base === "date") {
+    print(raw, new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }));
+    input.value = "";
+    return;
+  }
+
+  if (base === "neofetch") {
+    const ua = navigator.userAgent;
+    const browser =
+      ua.includes("Firefox") ? "Firefox" :
+      ua.includes("Edg")     ? "Edge" :
+      ua.includes("Chrome")  ? "Chrome" :
+      ua.includes("Safari")  ? "Safari" : "Unknown";
+    const os =
+      ua.includes("Windows") ? "Windows" :
+      ua.includes("Mac")     ? "macOS" :
+      ua.includes("Android") ? "Android" :
+      ua.includes("iPhone") || ua.includes("iPad") ? "iOS" :
+      ua.includes("Linux")   ? "Linux" : "Unknown";
+    const res   = `${screen.width}x${screen.height}`;
+    const theme = localStorage.getItem("theme") || "purple";
+    const now   = new Date();
+    const time  = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+
+    print(raw,
+      `<span class="label">OS</span>       ${os}<br>` +
+      `<span class="label">Browser</span>  ${browser}<br>` +
+      `<span class="label">Resolution</span> ${res}<br>` +
+      `<span class="label">Theme</span>    ${theme}<br>` +
+      `<span class="label">Time</span>     ${time}`
+    );
+    input.value = "";
+    return;
+  }
+
+  if (base === "music") {
+    if (!LASTFM_USER || !LASTFM_KEY) {
+      print(raw, "Music not configured. Set LASTFM_USER and LASTFM_KEY in script.js");
+      input.value = "";
+      return;
+    }
+    print(raw, "Fetching...");
+    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_KEY}&format=json&limit=1`)
+      .then(r => r.json())
+      .then(data => {
+        const track     = data.recenttracks.track[0];
+        const playing   = track["@attr"]?.nowplaying;
+        const name      = track.name;
+        const artist    = track.artist["#text"];
+        const status    = playing ? "▶ Now playing" : "↩ Last played";
+        const last = output.lastElementChild;
+        if (last) last.querySelector(".response-line").innerHTML =
+          `${status}: <strong>${name}</strong> — ${artist}`;
+      })
+      .catch(() => {
+        const last = output.lastElementChild;
+        if (last) last.querySelector(".response-line").textContent = "Could not fetch music.";
+      });
+    input.value = "";
+    return;
+  }
 
   if (base === "theme") {
     if (!arg) {
@@ -128,7 +222,6 @@ input.addEventListener("keydown", (e) => {
     } else {
       print(raw, `Unknown theme`);
     }
-
     input.value = "";
     return;
   }
@@ -140,7 +233,7 @@ input.addEventListener("keydown", (e) => {
       input.value = "";
       return;
     }
-    print(raw, `Fetching logs...`);
+    print(raw, "Fetching logs...");
     fetch(`/api/logs?key=${encodeURIComponent(pw)}`)
       .then(r => {
         if (r.status === 401) throw new Error("Unauthorized");
