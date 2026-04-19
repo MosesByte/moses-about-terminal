@@ -118,6 +118,32 @@ input.addEventListener("keydown", (e) => {
     return;
   }
 
+  if (base === "logs") {
+    const pw = parts[1];
+    if (!pw) {
+      print(raw, `Usage: <strong>logs</strong> &lt;password&gt;`);
+      input.value = "";
+      return;
+    }
+    print(raw, `Fetching logs...`);
+    fetch(`/api/logs?key=${encodeURIComponent(pw)}`)
+      .then(r => {
+        if (r.status === 401) throw new Error("Unauthorized");
+        return r.text();
+      })
+      .then(text => {
+        const lines = text.split("\n").map(l => l || "&nbsp;").join("<br>");
+        const last = output.lastElementChild;
+        if (last) last.querySelector(".response-line").innerHTML = lines;
+      })
+      .catch(err => {
+        const last = output.lastElementChild;
+        if (last) last.querySelector(".response-line").textContent = err.message;
+      });
+    input.value = "";
+    return;
+  }
+
   const res = commands[base] || "Unknown command";
   print(raw, res);
   input.value = "";
@@ -125,6 +151,23 @@ input.addEventListener("keydown", (e) => {
 
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
+
+const banner = document.getElementById("cookie-banner");
+if (localStorage.getItem("cookie-consent") !== null) {
+  banner.style.display = "none";
+}
+
+document.getElementById("cookie-accept").addEventListener("click", (e) => {
+  e.stopPropagation();
+  localStorage.setItem("cookie-consent", "1");
+  banner.style.display = "none";
+});
+
+document.getElementById("cookie-decline").addEventListener("click", (e) => {
+  e.stopPropagation();
+  localStorage.setItem("cookie-consent", "0");
+  banner.style.display = "none";
+});
 
 const hasConsent = localStorage.getItem("cookie-consent") === "1";
 fetch("/api/views", {

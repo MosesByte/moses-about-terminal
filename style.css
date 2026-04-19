@@ -287,6 +287,60 @@ input {
   background: transparent;
 }
 
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  color: var(--text-main);
+  box-shadow: 0 0 20px var(--shadow-soft);
+  white-space: nowrap;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.cookie-btn {
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  padding: 4px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cookie-btn.accept {
+  color: var(--text-strong);
+  border-color: var(--text-strong);
+}
+
+.cookie-btn.accept:hover {
+  background: var(--text-strong);
+  color: #000;
+}
+
+.cookie-btn.decline {
+  color: var(--text-muted);
+}
+
+.cookie-btn.decline:hover {
+  background: rgba(255,255,255,0.05);
+}
+
 @media (max-width: 900px) {
   body {
     overflow: auto;
