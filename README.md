@@ -12,8 +12,8 @@ Feel free to use this as inspiration or just copy parts of it if you want to bui
 
 ## Links
 
-- Discord: your-discord-here
-- guns.lol: https://guns.lol/moses76
+- Discord: moses.drip
+- guns.lol: https://guns.lol/moses
 
 ---
 
