@@ -14,7 +14,7 @@
     <div class="titlebar">
       <div class="mac-buttons">
         <span class="dot red"></span>
-        <span class="dot yellow"></span>
+        <span class="dot yellow" id="dot-yellow"></span>
         <span class="dot green"></span>
       </div>
       <span class="title">MOSES TERMINAL</span>
@@ -40,7 +40,7 @@
 ╚════██║   ██║   ██╔══██║██╔══██╗ 
 ███████║   ██║   ██║  ██║██║  ██║ 
 ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝</pre>
-        <h1 class="main-title">moses.wtf</h1>
+        <h1 class="main-title" id="main-title">moses.wtf</h1>
       </div>
 
       <div class="hero-right">
@@ -77,6 +77,55 @@
 
     <section id="output" class="output"></section>
   </main>
+
+  <div class="matrix-overlay" id="matrix-overlay">
+    <canvas id="matrix-canvas"></canvas>
+    <div class="matrix-center">
+      <div class="matrix-idle">
+        <div>SYSTEM IDLE</div>
+        <div>&gt; hibernating...<span class="matrix-cursor">▋</span></div>
+      </div>
+    </div>
+    <div class="matrix-hint">— click or press any key to restore —</div>
+  </div>
+
+  <div class="egg-toast" id="egg-toast"></div>
+
+  <div class="links-overlay" id="links-overlay">
+    <div class="links-panel" id="links-panel">
+      <button class="links-close" id="links-close">×</button>
+      <div class="links-header">
+        <div class="links-title">moses.wtf</div>
+        <div class="links-sub">links &amp; profiles</div>
+      </div>
+      <div class="links-list">
+        <a class="link-item" href="https://guns.lol/moses" target="_blank" rel="noopener noreferrer">
+          <span class="link-platform">guns.lol</span>
+          <span class="link-desc">main profile</span>
+        </a>
+        <a class="link-item" href="https://instagram.com/mosesdercutter" target="_blank" rel="noopener noreferrer">
+          <span class="link-platform">instagram</span>
+          <span class="link-desc">@mosesdercutter</span>
+        </a>
+        <a class="link-item" href="https://steamcommunity.com/id/schwarzepillen" target="_blank" rel="noopener noreferrer">
+          <span class="link-platform">steam</span>
+          <span class="link-desc">game main</span>
+        </a>
+        <a class="link-item" href="https://github.com/MosesByte" target="_blank" rel="noopener noreferrer">
+          <span class="link-platform">github</span>
+          <span class="link-desc">open source</span>
+        </a>
+        <a class="link-item" href="https://fakecrime.bio/moses76" target="_blank" rel="noopener noreferrer">
+          <span class="link-platform">fakecrime.bio</span>
+          <span class="link-desc">link profile</span>
+        </a>
+        <a class="link-item" href="mailto:contact@moses.wtf">
+          <span class="link-platform">contact@moses.wtf</span>
+          <span class="link-desc">get in touch</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

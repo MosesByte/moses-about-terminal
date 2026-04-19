@@ -302,6 +302,12 @@ input.addEventListener("keydown", (e) => {
     return;
   }
 
+  if (base === "open" && arg === "links") {
+    openLinks();
+    input.value = "";
+    return;
+  }
+
   if (base === "logs") {
     const pw = parts[1];
     if (!pw) {
@@ -345,6 +351,24 @@ input.addEventListener("keydown", (e) => {
   input.value = "";
 });
 
+const linksOverlay = document.getElementById("links-overlay");
+const terminal     = document.getElementById("terminal");
+
+function openLinks() {
+  linksOverlay.classList.add("open");
+  terminal.classList.add("dimmed");
+}
+
+function closeLinks() {
+  linksOverlay.classList.remove("open");
+  terminal.classList.remove("dimmed");
+}
+
+document.getElementById("main-title").addEventListener("click", openLinks);
+document.getElementById("links-close").addEventListener("click", closeLinks);
+linksOverlay.addEventListener("click", e => { if (e.target === linksOverlay) closeLinks(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeLinks(); });
+
 document.querySelectorAll(".hint-btn").forEach(btn => {
   btn.addEventListener("click", e => {
     e.stopPropagation();
@@ -369,6 +393,115 @@ output.addEventListener("click", e => {
 
 document.addEventListener("click", () => input.focus());
 window.addEventListener("load", () => input.focus());
+
+// ── Easter Egg System ──────────────────────────────────────────────────────
+const EGG_TOTAL = 2;
+const eggState  = JSON.parse(localStorage.getItem("eggState") || "{}");
+
+function markEggFound(id) {
+  if (eggState[id]) return false;
+  eggState[id] = true;
+  localStorage.setItem("eggState", JSON.stringify(eggState));
+  return true;
+}
+
+function showEasterEgg(id) {
+  const isNew = markEggFound(id);
+  if (!isNew) return;
+  const found = Object.keys(eggState).length;
+  const toast = document.getElementById("egg-toast");
+  toast.textContent = `[ ${found} / ${EGG_TOTAL} easter eggs found ]`;
+  toast.classList.remove("show");
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 4100);
+}
+
+// ── Matrix / Minimize ──────────────────────────────────────────────────────
+const matrixOverlay = document.getElementById("matrix-overlay");
+const matrixCanvas  = document.getElementById("matrix-canvas");
+let matrixAnimId = null;
+let matrixActive = false;
+
+function getThemeRgb() {
+  const theme = localStorage.getItem("theme") || "purple";
+  const map = { purple: "185, 140, 247", red: "205, 71, 71", blue: "77, 166, 255" };
+  return map[theme] || map.purple;
+}
+
+function startMatrix() {
+  const ctx = matrixCanvas.getContext("2d");
+  matrixCanvas.width  = window.innerWidth;
+  matrixCanvas.height = window.innerHeight;
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+  const chars = "01▪▫░╔╗╚╝║═◆□■<>[]|-_~?";
+  const colW  = 28;
+  const cols  = Math.floor(matrixCanvas.width / colW);
+  const drops = Array.from({ length: cols }, () => ({
+    y:     Math.random() * -120,
+    speed: 0.3 + Math.random() * 0.55,
+  }));
+
+  function draw() {
+    if (!matrixActive) return;
+    const rgb = getThemeRgb();
+    ctx.fillStyle = "rgba(0, 0, 0, 0.045)";
+    ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    ctx.font = "13px Consolas, monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const d = drops[i];
+      const y = d.y * 18;
+      if (y > matrixCanvas.height + 80) { d.y = Math.random() * -120; continue; }
+      if (y > 0) {
+        ctx.fillStyle = `rgba(${rgb}, ${0.1 + Math.random() * 0.2})`;
+        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * colW, y);
+      }
+      d.y += d.speed;
+    }
+    matrixAnimId = requestAnimationFrame(draw);
+  }
+  matrixAnimId = requestAnimationFrame(draw);
+}
+
+function stopMatrix() {
+  if (matrixAnimId) { cancelAnimationFrame(matrixAnimId); matrixAnimId = null; }
+}
+
+function minimizeTerminal() {
+  matrixActive = true;
+  terminal.classList.add("minimized");
+  setTimeout(() => {
+    matrixOverlay.classList.add("active");
+    startMatrix();
+  }, 280);
+  showEasterEgg("minimize");
+}
+
+function restoreTerminal() {
+  if (!matrixActive) return;
+  matrixActive = false;
+  stopMatrix();
+  matrixOverlay.classList.remove("active");
+  setTimeout(() => {
+    terminal.classList.remove("minimized");
+    input.focus();
+  }, 150);
+}
+
+document.getElementById("dot-yellow").addEventListener("click", e => {
+  e.stopPropagation();
+  matrixActive ? restoreTerminal() : minimizeTerminal();
+});
+
+matrixOverlay.addEventListener("click", restoreTerminal);
+
+document.addEventListener("keydown", e => {
+  if (!matrixActive) return;
+  restoreTerminal();
+});
 
 fetch("/api/views", { headers: { "X-Log-Consent": "1" } })
   .then(r => r.json())
