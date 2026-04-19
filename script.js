@@ -48,8 +48,15 @@ neverlose&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/neverlose" target="_blank" r
 fatality&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://ysn.lol/fatality" target="_blank" rel="noopener noreferrer">ysn.lol/fatality</a>`,
 
   privacy: `<strong>Privacy Policy</strong><br><br>
-This website collects your IP address and visit timestamp for analytics purposes.<br>
-Data is stored securely and not shared with third parties.<br>
+
+We respect your privacy. <br><br>
+
+This website does not collect or store any personal data, including IP addresses.<br>
+We do not use tracking tools, analytics services, or cookies.<br><br>
+
+We only maintain a simple, non-identifiable view count to understand general site usage. <br> This counter does not store any personal information and cannot be used to identify visitors.<br><br>
+
+If you have any questions, feel free to reach out.<br>
 Hosting: Cloudflare (US). Contact: <a href="mailto:contact@moses.wtf">contact@moses.wtf</a>`
 };
 
@@ -58,6 +65,7 @@ const cmdList = ["help","about","socials","linktree","theme","neofetch","music",
 const cmdHistory = [];
 let historyIndex = -1;
 let lastSuggestion = null;
+let cmdCount = 0;
 
 function levenshtein(a, b) {
   const dp = Array.from({ length: a.length + 1 }, (_, i) =>
@@ -196,8 +204,15 @@ input.addEventListener("keydown", (e) => {
 
   if (cmdLower === "clear") {
     output.innerHTML = "";
+    cmdCount = 0;
     input.value = "";
     return;
+  }
+
+  cmdCount++;
+  if (cmdCount > 3) {
+    output.innerHTML = "";
+    cmdCount = 1;
   }
 
   const parts = raw.split(/\s+/);
@@ -334,8 +349,7 @@ document.querySelectorAll(".hint-btn").forEach(btn => {
   btn.addEventListener("click", e => {
     e.stopPropagation();
     input.value = btn.dataset.cmd;
-    input.focus();
-    updateGhost();
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
   });
 });
 
@@ -345,6 +359,11 @@ output.addEventListener("click", e => {
     lastSuggestion = null;
     input.focus();
     updateGhost();
+  }
+  if (e.target.classList.contains("cmd-name")) {
+    input.value = e.target.textContent.trim();
+    input.focus();
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
   }
 });
 
