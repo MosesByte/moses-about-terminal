@@ -427,6 +427,9 @@ function showEasterEgg(id) {
   void toast.offsetWidth;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 4100);
+  const sfx = new Audio("/easteregg.mp3");
+  sfx.volume = 0.5;
+  sfx.play().catch(() => {});
 }
 
 // ── Matrix / Minimize ──────────────────────────────────────────────────────

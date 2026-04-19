@@ -475,9 +475,9 @@ input {
 
 .egg-toast {
   position: fixed;
-  bottom: 36px;
+  top: 58%;
   left: 50%;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(-50%);
   z-index: 300;
   background: rgba(8, 5, 18, 0.92);
   border: 1px solid var(--border-soft);
@@ -499,13 +499,13 @@ input {
 }
 
 @keyframes egg-reveal {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  10%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-  13%  { transform: translateX(-52%) translateY(0); }
-  15%  { transform: translateX(-49%) translateY(0); }
-  17%  { transform: translateX(-50%) translateY(0); }
+  0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 12px)); }
+  10%  { opacity: 1; transform: translateX(-50%) translateY(-50%); }
+  13%  { transform: translateX(-52%) translateY(-50%); }
+  15%  { transform: translateX(-49%) translateY(-50%); }
+  17%  { transform: translateX(-50%) translateY(-50%); }
   78%  { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-5px); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(calc(-50% - 6px)); }
 }
 
 .links-overlay {
