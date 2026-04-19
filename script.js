@@ -2,7 +2,7 @@ const input = document.getElementById("cmd");
 const output = document.getElementById("output");
 
 const LASTFM_USER = "Moses762";
-const LASTFM_KEY  = "a752fb4d51a7933ef4288d72fa86f087";
+const LASTFM_KEY  = " a752fb4d51a7933ef4288d72fa86f087";
 
 const themeMap = ["purple", "red", "blue"];
 
