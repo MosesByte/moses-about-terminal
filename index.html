@@ -4,46 +4,53 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>moses.wtf</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
+  <div class="bg"></div>
 
-<div class="bg"></div>
+  <main class="terminal" id="terminal">
+    <div class="titlebar">
+      <div class="mac-buttons">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
 
-<main class="terminal" id="terminal">
-
-  <div class="titlebar">
-    <span>MOSES TERMINAL</span>
-  </div>
-
-  <section class="hero">
-    <pre class="ascii">
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣶⣦⡀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣷
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⠃
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠿⠿⠛⠁
-    </pre>
-
-    <div class="info">
-      <h1>moses.wtf</h1>
-      <p>Host: Cloudflare</p>
-      <p>User: Moses</p>
-      <p>Theme: Purple?</p>
-      <p>Type "help"</p>
+      <span class="title">MOSES TERMINAL</span>
     </div>
-  </section>
 
-  <section id="output" class="output"></section>
+    <section class="hero">
+      <pre class="ascii">
+███╗   ███╗ ██████╗ ███████╗███████╗███████╗
+████╗ ████║██╔═══██╗██╔════╝██╔════╝██╔════╝
+██╔████╔██║██║   ██║███████╗█████╗  ███████╗
+██║╚██╔╝██║██║   ██║╚════██║██╔══╝  ╚════██║
+██║ ╚═╝ ██║╚██████╔╝███████║███████╗███████║
+╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚══════╝
+      </pre>
 
-  <div class="input-line">
-    <span>PS C:\Users\Moses&gt;</span>
-    <input id="cmd" autofocus />
-  </div>
+      <div class="hero-name">
+        <h1>moses.wtf</h1>
+        <div class="divider"></div>
 
-</main>
+        <div class="info-block">
+          <p><span class="label">Welcome:</span> Hi welcome to my terminal about me page</p>
+          <p><span class="label">Host:</span> Cloudflare</p>
+          <p><span class="label">User:</span> Moses</p>
+          <p><span class="label">Theme:</span> Purple</p>
+        </div>
+      </div>
+    </section>
 
-<script src="script.js"></script>
+    <section id="output" class="output"></section>
+
+    <div class="input-line">
+      <span class="prompt">PS C:\Users\Moses&gt;</span>
+      <input id="cmd" type="text" autofocus />
+    </div>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

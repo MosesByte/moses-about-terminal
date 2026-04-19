@@ -7,7 +7,6 @@ socials    Links
 whoami     User info
 date       Time
 clear      Clear terminal`,
-
   about: "Ich bin Moses.",
   socials: "guns.lol/moses76",
   whoami: "User: Moses",
@@ -15,10 +14,22 @@ clear      Clear terminal`,
 };
 
 function print(cmd, res) {
-  output.innerHTML += `
-    <div>> ${cmd}</div>
-    <div>${res}</div>
-  `;
+  const entry = document.createElement("div");
+  entry.className = "output-entry";
+
+  const commandLine = document.createElement("div");
+  commandLine.className = "command-line";
+  commandLine.textContent = `> ${cmd}`;
+
+  const responseLine = document.createElement("div");
+  responseLine.className = "response-line";
+  responseLine.textContent = res;
+
+  entry.appendChild(commandLine);
+  entry.appendChild(responseLine);
+  output.appendChild(entry);
+
+  output.scrollTop = output.scrollHeight;
 }
 
 input.addEventListener("keydown", (e) => {
@@ -28,16 +39,18 @@ input.addEventListener("keydown", (e) => {
     const cmd = input.value.trim();
     if (!cmd) return;
 
-    if (cmd === "clear") {
+    if (cmd.toLowerCase() === "clear") {
       output.innerHTML = "";
     } else {
-      let res = commands[cmd];
+      let res = commands[cmd.toLowerCase()];
 
       if (typeof res === "function") {
         res = res();
       }
 
-      if (!res) res = "Unknown command";
+      if (!res) {
+        res = "Unknown command";
+      }
 
       print(cmd, res);
     }
@@ -46,6 +59,5 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-/* Fokus fix */
 document.addEventListener("click", () => input.focus());
-window.onload = () => input.focus();
+window.addEventListener("load", () => input.focus());
