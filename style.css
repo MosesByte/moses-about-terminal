@@ -6,23 +6,30 @@ body {
   overflow: hidden;
 }
 
-/* Background Glow */
+/* Background FIXED */
 .bg {
   position: fixed;
   inset: 0;
+  z-index: -1; /* WICHTIG */
+
   background:
     radial-gradient(circle at 20% 20%, rgba(168,85,247,.4), transparent 40%),
     radial-gradient(circle at 80% 70%, rgba(168,85,247,.25), transparent 40%),
     #0f0a19;
+
   filter: blur(14px);
 }
 
-/* Terminal Box */
+/* Terminal */
 .terminal {
+  position: relative;
+  z-index: 1;
+
   width: 900px;
   max-width: 92%;
   height: 700px;
   margin: 60px auto;
+
   background: rgba(0,0,0,.85);
   border-radius: 10px;
   padding: 20px;

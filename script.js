@@ -26,8 +26,7 @@ input.addEventListener("keydown", (e) => {
     e.preventDefault();
 
     const cmd = input.value.trim();
-
-    if (cmd === "") return;
+    if (!cmd) return;
 
     if (cmd === "clear") {
       output.innerHTML = "";
@@ -47,6 +46,6 @@ input.addEventListener("keydown", (e) => {
   }
 });
 
-// Fokus fix
+/* Fokus fix */
 document.addEventListener("click", () => input.focus());
 window.onload = () => input.focus();
