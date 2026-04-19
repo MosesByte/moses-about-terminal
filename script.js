@@ -146,7 +146,7 @@ if (savedFont && fontMap[savedFont]) {
   setFont(savedFont);
 }
 
-const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs", "font"];
+const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs", "font", "reset"];
 const themeArgs = themeMap;
 
 const ghost = document.getElementById("ghost");
@@ -366,6 +366,17 @@ input.addEventListener("keydown", (e) => {
     } else {
       print(raw, `Unknown font`);
     }
+    input.value = "";
+    return;
+  }
+
+  if (base === "reset") {
+    localStorage.removeItem("theme");
+    localStorage.removeItem("font");
+    localStorage.removeItem("eggState");
+    setTheme("purple");
+    setFont("default");
+    print(raw, `Settings reset to default.`);
     input.value = "";
     return;
   }
