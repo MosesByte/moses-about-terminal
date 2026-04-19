@@ -49,19 +49,6 @@ body.theme-blue {
   --shadow-soft: rgba(77, 166, 255, 0.08);
 }
 
-body.theme-fatality {
-  --bg-main: #04000a;
-  --bg-glow-1: rgba(160, 0, 30, 0.22);
-  --bg-glow-2: rgba(100, 0, 20, 0.14);
-  --text-main: #c0001e;
-  --text-strong: #ff1a3c;
-  --text-title: #e8001a;
-  --text-muted: #6b2030;
-  --border-soft: rgba(180, 0, 30, 0.28);
-  --border-faint: rgba(160, 0, 20, 0.10);
-  --shadow-soft: rgba(180, 0, 30, 0.12);
-}
-
 * {
   box-sizing: border-box;
 }

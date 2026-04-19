@@ -5,13 +5,12 @@ const output = document.getElementById("output");
 const LASTFM_USER = "Moses762";
 const LASTFM_KEY  = " a752fb4d51a7933ef4288d72fa86f087";
 
-const themeMap = ["purple", "red", "blue", "fatality"];
+const themeMap = ["purple", "red", "blue"];
 
 const themeData = {
   purple: { rgb: "185, 140, 247", hex: "#B98CF7" },
   red:    { rgb: "205, 71, 71",   hex: "#CD4747" },
   blue:     { rgb: "77, 166, 255",  hex: "#4DA6FF" },
-  fatality: { rgb: "192, 0, 30",   hex: "#C0001E" }
 };
 
 const commands = {
