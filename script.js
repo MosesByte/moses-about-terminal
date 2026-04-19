@@ -7,6 +7,24 @@ const LASTFM_KEY  = " a752fb4d51a7933ef4288d72fa86f087";
 
 const themeMap = ["purple", "red", "blue"];
 
+const fontMap = {
+  default:     "Consolas, monospace",
+  jetbrains:   "'JetBrains Mono', monospace",
+  fira:        "'Fira Code', monospace",
+  ibm:         "'IBM Plex Mono', monospace",
+  space:       "'Space Mono', monospace",
+  inconsolata: "'Inconsolata', monospace",
+  source:      "'Source Code Pro', monospace",
+};
+const fontList = Object.keys(fontMap);
+
+function setFont(font) {
+  document.documentElement.style.setProperty("--font-main", fontMap[font]);
+  localStorage.setItem("font", font);
+  const el = document.getElementById("font-info");
+  if (el) el.textContent = font;
+}
+
 const themeData = {
   purple: { rgb: "185, 140, 247", hex: "#B98CF7" },
   red:    { rgb: "205, 71, 71",   hex: "#CD4747" },
@@ -123,7 +141,12 @@ if (savedTheme && themeMap.includes(savedTheme)) {
   setTheme("purple");
 }
 
-const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs"];
+const savedFont = localStorage.getItem("font");
+if (savedFont && fontMap[savedFont]) {
+  setFont(savedFont);
+}
+
+const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs", "font"];
 const themeArgs = themeMap;
 
 const ghost = document.getElementById("ghost");
@@ -138,6 +161,10 @@ function getGhostSuffix(val) {
   } else if (parts.length === 2 && parts[0].toLowerCase() === "theme") {
     const partial = parts[1].toLowerCase();
     const matches = themeArgs.filter(t => t.startsWith(partial));
+    if (matches.length === 1) return matches[0].slice(partial.length);
+  } else if (parts.length === 2 && parts[0].toLowerCase() === "font") {
+    const partial = parts[1].toLowerCase();
+    const matches = fontList.filter(f => f.startsWith(partial));
     if (matches.length === 1) return matches[0].slice(partial.length);
   }
   return "";
@@ -173,6 +200,11 @@ input.addEventListener("keydown", (e) => {
       const partial = parts[1].toLowerCase();
       const matches = themeArgs.filter(t => t.startsWith(partial));
       if (matches.length === 1) { input.value = `theme ${matches[0]}`; updateGhost(); }
+      else if (matches.length > 1) print(raw, matches.join("&nbsp;&nbsp;"));
+    } else if (parts.length === 2 && parts[0].toLowerCase() === "font") {
+      const partial = parts[1].toLowerCase();
+      const matches = fontList.filter(f => f.startsWith(partial));
+      if (matches.length === 1) { input.value = `font ${matches[0]}`; updateGhost(); }
       else if (matches.length > 1) print(raw, matches.join("&nbsp;&nbsp;"));
     }
     return;
@@ -260,11 +292,13 @@ input.addEventListener("keydown", (e) => {
     const now   = new Date();
     const time  = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
 
+    const font = localStorage.getItem("font") || "default";
     print(raw,
       `<span class="label">OS</span>       ${os}<br>` +
       `<span class="label">Browser</span>  ${browser}<br>` +
       `<span class="label">Resolution</span> ${res}<br>` +
       `<span class="label">Theme</span>    ${theme}<br>` +
+      `<span class="label">Font</span>     ${font}<br>` +
       `<span class="label">Time</span>     ${time}`
     );
     input.value = "";
@@ -300,14 +334,37 @@ input.addEventListener("keydown", (e) => {
 
   if (base === "theme") {
     if (!arg) {
-      const current = localStorage.getItem("theme") || "purple";
-      const options = themeMap.map(t => t === current ? `<strong>${t} ✓</strong>` : t).join(" | ");
-      print(raw, `Usage: <strong>theme</strong> ${options}`);
+      const curTheme = localStorage.getItem("theme") || "purple";
+      const curFont  = localStorage.getItem("font")  || "default";
+      const themeOpts = themeMap.map(t => t === curTheme ? `<strong>${t} ✓</strong>` : t).join(" | ");
+      const fontOpts  = fontList.map(f => f === curFont  ? `<strong>${f} ✓</strong>` : f).join(" | ");
+      print(raw, `Theme: ${themeOpts}<br>Font:&nbsp; ${fontOpts}`);
     } else if (themeMap.includes(arg)) {
       setTheme(arg);
-      print(raw, `Theme changed to <strong>${arg}</strong>`);
+      const fontArg = parts[2] ? parts[2].toLowerCase() : null;
+      if (fontArg && fontMap[fontArg]) {
+        setFont(fontArg);
+        print(raw, `Theme → <strong>${arg}</strong> &nbsp; Font → <strong>${fontArg}</strong>`);
+      } else {
+        print(raw, `Theme → <strong>${arg}</strong>`);
+      }
     } else {
       print(raw, `Unknown theme`);
+    }
+    input.value = "";
+    return;
+  }
+
+  if (base === "font") {
+    if (!arg) {
+      const cur = localStorage.getItem("font") || "default";
+      const opts = fontList.map(f => f === cur ? `<strong>${f} ✓</strong>` : f).join(" | ");
+      print(raw, `Usage: <strong>font</strong> ${opts}`);
+    } else if (fontMap[arg]) {
+      setFont(arg);
+      print(raw, `Font → <strong>${arg}</strong>`);
+    } else {
+      print(raw, `Unknown font`);
     }
     input.value = "";
     return;
