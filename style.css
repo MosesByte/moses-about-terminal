@@ -133,31 +133,36 @@ body {
   flex-direction: row;
   gap: 28px;
   margin-bottom: 6px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .hero-left {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .ascii {
   margin: 0;
-  font-size: 10px;
   line-height: 0.9;
   white-space: pre;
   color: var(--text-title);
   text-shadow: 0 0 8px color-mix(in srgb, var(--text-title) 20%, transparent);
 }
 
+.ascii-trap { font-size: 10px; }
+.ascii-moses { font-size: 7px; }
+.ascii-star { font-size: 10px; }
+
 .main-title {
-  margin: 4px 0 0 0;
-  font-size: 52px;
+  margin: 0;
+  font-size: 20px;
   line-height: 1;
   color: var(--text-title);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
 }
 
 .hero-right {
