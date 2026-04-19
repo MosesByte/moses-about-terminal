@@ -25,7 +25,18 @@ const commands = {
 <span class="cmd-name">privacy</span>Privacy policy<br>
 <span class="cmd-name">clear</span>Clear terminal`,
 
-  about: `Hi`,
+  about: `
+  
+Hi, I’m Moses. <br>
+I started with hvh in early 2018, but I haven’t really been active for a while. I still check the forums from time to time though.<br><br>
+
+I’m interested in weapons, linktrees, anime, and games — and every now and then I build small pages like this.<br>
+
+Thanks for stopping by.<br><br>
+
+– moses
+
+`,
 
   socials: `<strong>guns.lol:</strong> <a href="https://guns.lol/moses" target="_blank" rel="noopener noreferrer">moses</a><br>
     <strong>Instagram:</strong> <a href="https://instagram.com/mosesdercutter" target="_blank" rel="noopener noreferrer">mosesdercutter</a><br>
@@ -357,6 +368,7 @@ const terminal     = document.getElementById("terminal");
 function openLinks() {
   linksOverlay.classList.add("open");
   terminal.classList.add("dimmed");
+  showEasterEgg("linktree");
 }
 
 function closeLinks() {

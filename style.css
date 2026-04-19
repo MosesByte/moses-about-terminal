@@ -118,11 +118,37 @@ body {
   height: 12px;
   border-radius: 50%;
   display: inline-block;
+  position: relative;
+  cursor: default;
 }
 
-.red { background: #ff5f57; }
+#dot-yellow {
+  cursor: pointer;
+}
+
+.dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 12px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.mac-buttons:hover .dot.red::before    { content: '×'; opacity: 1; }
+.mac-buttons:hover .dot.yellow::before { content: '−'; opacity: 1; }
+.mac-buttons:hover .dot.green::before  { content: '+'; opacity: 1; }
+
+.red    { background: #ff5f57; }
 .yellow { background: #febc2e; }
-.green { background: #28c840; }
+.green  { background: #28c840; }
 
 .title {
   opacity: 0.9;
