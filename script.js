@@ -88,7 +88,7 @@ if (savedTheme && themeMap.includes(savedTheme)) {
   setTheme("purple");
 }
 
-const allCommands = [...Object.keys(commands), "theme", "clear", "logs"];
+const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs"];
 const themeArgs = themeMap;
 
 const ghost = document.getElementById("ghost");
