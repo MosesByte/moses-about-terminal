@@ -118,12 +118,59 @@ function updateGhost() {
 input.addEventListener("input", updateGhost);
 
 input.addEventListener("keydown", (e) => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const raw = input.value;
+    const parts = raw.split(/\s+/);
+    if (parts.length === 1) {
+      const partial = parts[0].toLowerCase();
+      if (!partial) return;
+      const matches = allCommands.filter(c => c.startsWith(partial));
+      if (matches.length === 1) { input.value = matches[0]; updateGhost(); }
+      else if (matches.length > 1) print(raw, matches.join("&nbsp;&nbsp;"));
+    } else if (parts.length === 2 && parts[0].toLowerCase() === "theme") {
+      const partial = parts[1].toLowerCase();
+      const matches = themeArgs.filter(t => t.startsWith(partial));
+      if (matches.length === 1) { input.value = `theme ${matches[0]}`; updateGhost(); }
+      else if (matches.length > 1) print(raw, matches.join("&nbsp;&nbsp;"));
+    }
+    return;
+  }
+
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    if (historyIndex < cmdHistory.length - 1) {
+      historyIndex++;
+      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+      updateGhost();
+    }
+    return;
+  }
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (historyIndex > 0) {
+      historyIndex--;
+      input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+    } else {
+      historyIndex = -1;
+      input.value = "";
+    }
+    updateGhost();
+    return;
+  }
+
   if (e.key !== "Enter") return;
   e.preventDefault();
 
   const raw = input.value.trim();
   const cmdLower = raw.toLowerCase();
   if (!cmdLower) return;
+
+  cmdHistory.push(raw);
+  historyIndex = -1;
+  ghost.textContent = "";
+  input.style.width = "2px";
 
   if (cmdLower === "clear") {
     output.innerHTML = "";
