@@ -903,8 +903,8 @@ input {
 }
 
 .badge svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   display: block;
 }
 
@@ -913,7 +913,7 @@ input {
   font-weight: 700;
   color: var(--text-title);
   letter-spacing: 0.06em;
-  margin-bottom: 4px;
+  line-height: 1;
 }
 
 .links-sub {
