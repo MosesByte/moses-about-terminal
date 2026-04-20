@@ -23,7 +23,7 @@
   <meta name="twitter:description" content="A terminal-style personal page by Moses. Type 'help' to get started." />
   <meta name="twitter:image" content="https://moses.wtf/og.png" />
 
-  <link rel="stylesheet" href="style.css?v=14" />
+  <link rel="stylesheet" href="style.css?v=15" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -192,6 +192,29 @@
           <span class="link-platform">source code</span>
           <span class="link-desc">this terminal</span>
         </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-overlay" id="admin-overlay">
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-header">
+        <div class="admin-header-left">
+          <span class="admin-title">&gt;_ admin</span>
+          <span class="admin-auth" id="admin-auth">● authenticated</span>
+        </div>
+        <button class="admin-close" id="admin-close">×</button>
+      </div>
+      <div class="admin-tabs" id="admin-tabs">
+        <button class="admin-tab active" data-tab="overview">overview</button>
+        <button class="admin-tab" data-tab="countries">countries</button>
+        <button class="admin-tab" data-tab="commands">commands</button>
+        <button class="admin-tab" data-tab="visitors">visitors</button>
+      </div>
+      <div class="admin-body" id="admin-body">
+        <div class="admin-loading" id="admin-loading">
+          fetching data<span class="admin-dots">...</span>
+        </div>
       </div>
     </div>
   </div>

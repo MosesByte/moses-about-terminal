@@ -262,6 +262,8 @@ input.addEventListener("keydown", (e) => {
   const base = parts[0].toLowerCase();
   const arg = parts[1] ? parts[1].toLowerCase() : "";
 
+  trackCommand(base);
+
   if (base === "time") {
     print(raw, new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
     input.value = "";
@@ -415,22 +417,8 @@ input.addEventListener("keydown", (e) => {
       return;
     }
 
-    print(raw, "Fetching logs...");
-    fetch(`/api/logs?key=${encodeURIComponent(pw)}`)
-      .then(r => {
-        if (r.status === 401) throw new Error("Unauthorized");
-        return r.text();
-      })
-      .then(text => {
-        const lines = text.split("\n").map(l => l || "&nbsp;").join("<br>");
-        const last = output.lastElementChild;
-        if (last) last.querySelector(".response-line").innerHTML = lines;
-      })
-      .catch(err => {
-        const last = output.lastElementChild;
-        if (last) last.querySelector(".response-line").textContent = err.message;
-      });
     input.value = "";
+    openAdminPanel(pw);
     return;
   }
 
@@ -712,3 +700,202 @@ fetch("/api/views", { headers: { "X-Log-Consent": "1" } })
   .then(r => r.json())
   .then(d => { document.getElementById("view-count").textContent = d.count; })
   .catch(() => { document.getElementById("view-count").textContent = "N/A"; });
+
+// ── Command Tracking ──────────────────────────────────────────────────────
+const SKIP_TRACK = new Set(["logs", "clear", "reset"]);
+
+function trackCommand(cmd) {
+  if (SKIP_TRACK.has(cmd)) return;
+  fetch("/api/cmdlog", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ command: cmd }),
+  }).catch(() => {});
+}
+
+// ── Admin Panel ───────────────────────────────────────────────────────────
+const adminOverlay = document.getElementById("admin-overlay");
+
+function closeAdminPanel() {
+  adminOverlay.classList.remove("open");
+  input.focus();
+}
+
+adminOverlay.addEventListener("click", e => { if (e.target === adminOverlay) closeAdminPanel(); });
+document.getElementById("admin-close").addEventListener("click", closeAdminPanel);
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && adminOverlay.classList.contains("open")) closeAdminPanel();
+});
+
+document.getElementById("admin-tabs").addEventListener("click", e => {
+  const tab = e.target.closest(".admin-tab");
+  if (!tab || !adminOverlay._data) return;
+  document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+  tab.classList.add("active");
+  renderAdminTab(tab.dataset.tab, adminOverlay._data);
+});
+
+function relTime(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000)    return "just now";
+  if (d < 3600000)  return `${Math.floor(d / 60000)}m ago`;
+  if (d < 86400000) return `${Math.floor(d / 3600000)}h ago`;
+  return `${Math.floor(d / 86400000)}d ago`;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function renderAdminTab(tab, data) {
+  const body = document.getElementById("admin-body");
+  if (tab === "overview")  { body.innerHTML = renderOverview(data); return; }
+  if (tab === "countries") { body.innerHTML = renderCountries(data); return; }
+  if (tab === "commands")  { body.innerHTML = renderCommands(data); return; }
+  if (tab === "visitors")  { body.innerHTML = renderVisitors(data); return; }
+}
+
+function renderOverview(data) {
+  const uniqueIPs = new Set(data.ipEntries.map(e => e.ip)).size;
+  const cmdCounts = {};
+  data.cmdEntries.forEach(e => { cmdCounts[e.command] = (cmdCounts[e.command] ?? 0) + 1; });
+  const topCmd = Object.entries(cmdCounts).sort((a,b) => b[1]-a[1])[0];
+  const topCountry = data.countries[0];
+
+  return `<div class="admin-stats">
+    <div class="admin-stat">
+      <div class="admin-stat-value">${data.totalViews.toLocaleString()}</div>
+      <div class="admin-stat-label">Total Views</div>
+      ${data.ownerVisits ? `<div class="admin-stat-sub">+${data.ownerVisits} owner (filtered)</div>` : ""}
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-value">${uniqueIPs}</div>
+      <div class="admin-stat-label">Unique Visitors</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-value">${topCmd ? esc(topCmd[0]) : "—"}</div>
+      <div class="admin-stat-label">Top Command</div>
+      ${topCmd ? `<div class="admin-stat-sub">${topCmd[1]} uses</div>` : ""}
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-value">${topCountry ? esc(topCountry.name) : "—"}</div>
+      <div class="admin-stat-label">Top Country</div>
+      ${topCountry ? `<div class="admin-stat-sub">${topCountry.count} visits</div>` : ""}
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-value">${data.cmdEntries.length}</div>
+      <div class="admin-stat-label">Commands Tracked</div>
+    </div>
+    <div class="admin-stat">
+      <div class="admin-stat-value">${data.ipEntries.length}</div>
+      <div class="admin-stat-label">IP Log Entries</div>
+    </div>
+  </div>`;
+}
+
+function renderCountries(data) {
+  if (!data.countries.length) return `<div class="admin-empty">no data yet</div>`;
+  const max = data.countries[0].count;
+  const rows = data.countries.map(c => `<tr>
+    <td class="admin-td-strong">${esc(c.name)}</td>
+    <td>${c.count}</td>
+    <td>
+      <div class="admin-bar-wrap">
+        <div class="admin-bar"><div class="admin-bar-fill" style="width:${Math.round(c.count/max*100)}%"></div></div>
+        <span class="admin-bar-pct">${Math.round(c.count / data.ipEntries.length * 100)}%</span>
+      </div>
+    </td>
+  </tr>`).join("");
+  return `<p class="admin-section-title">by country</p>
+  <table class="admin-table">
+    <thead><tr><th>Country</th><th>Visits</th><th>Share</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderCommands(data) {
+  if (!data.cmdEntries.length) return `<div class="admin-empty">no commands tracked yet</div>`;
+  const counts = {};
+  const latest = {};
+  data.cmdEntries.forEach(e => {
+    counts[e.command] = (counts[e.command] ?? 0) + 1;
+    if (!latest[e.command] || e.ts > latest[e.command]) latest[e.command] = e.ts;
+  });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const max = sorted[0][1];
+  const rows = sorted.map(([cmd, n]) => `<tr>
+    <td class="admin-td-strong">${esc(cmd)}</td>
+    <td>${n}</td>
+    <td>
+      <div class="admin-bar-wrap">
+        <div class="admin-bar"><div class="admin-bar-fill" style="width:${Math.round(n/max*100)}%"></div></div>
+      </div>
+    </td>
+    <td class="admin-td-muted">${relTime(latest[cmd])}</td>
+  </tr>`).join("");
+  return `<p class="admin-section-title">by usage</p>
+  <table class="admin-table">
+    <thead><tr><th>Command</th><th>Uses</th><th>Bar</th><th>Last used</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderVisitors(data) {
+  if (!data.ipEntries.length && !data.cmdEntries.length) return `<div class="admin-empty">no visitor data yet</div>`;
+
+  const byIp = {};
+  data.ipEntries.forEach(e => {
+    if (!byIp[e.ip]) byIp[e.ip] = { country: e.countryName, visits: 0, firstTs: e.ts, lastTs: e.ts, cmds: {} };
+    byIp[e.ip].visits++;
+    if (e.ts < byIp[e.ip].firstTs) byIp[e.ip].firstTs = e.ts;
+    if (e.ts > byIp[e.ip].lastTs)  byIp[e.ip].lastTs  = e.ts;
+  });
+  data.cmdEntries.forEach(e => {
+    if (!byIp[e.ip]) byIp[e.ip] = { country: e.countryName, visits: 0, firstTs: e.ts, lastTs: e.ts, cmds: {} };
+    byIp[e.ip].cmds[e.command] = (byIp[e.ip].cmds[e.command] ?? 0) + 1;
+    if (e.ts > byIp[e.ip].lastTs) byIp[e.ip].lastTs = e.ts;
+  });
+
+  const sorted = Object.entries(byIp).sort((a,b) => b[1].lastTs - a[1].lastTs);
+  const rows = sorted.map(([ip, d]) => {
+    const chips = Object.entries(d.cmds).sort((a,b)=>b[1]-a[1])
+      .map(([c,n]) => `<span class="admin-chip"><strong>${esc(c)}</strong> ×${n}</span>`).join("");
+    return `<tr>
+      <td class="admin-td-ip">${esc(ip)}</td>
+      <td class="admin-td-muted">${esc(d.country)}</td>
+      <td class="admin-td-muted">${relTime(d.lastTs)}</td>
+      <td><div class="admin-chips">${chips || '<span class="admin-td-muted">—</span>'}</div></td>
+    </tr>`;
+  }).join("");
+
+  return `<p class="admin-section-title">sorted by last seen</p>
+  <table class="admin-table">
+    <thead><tr><th>IP Address</th><th>Country</th><th>Last seen</th><th>Commands</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+async function openAdminPanel(pw) {
+  const body = document.getElementById("admin-body");
+  body.innerHTML = `<div class="admin-loading">fetching data<span class="admin-dots"></span></div>`;
+  document.querySelectorAll(".admin-tab").forEach((t,i) => t.classList.toggle("active", i === 0));
+
+  adminOverlay.classList.add("open");
+  terminal.classList.add("dimmed");
+
+  try {
+    const r = await fetch(`/api/logs?key=${encodeURIComponent(pw)}&format=json`);
+    if (r.status === 401) {
+      adminOverlay.classList.remove("open");
+      terminal.classList.remove("dimmed");
+      print(`logs ${pw}`, "Unauthorized");
+      return;
+    }
+    const data = await r.json();
+    adminOverlay._data = data;
+    renderAdminTab("overview", data);
+  } catch {
+    body.innerHTML = `<div class="admin-empty">failed to load data</div>`;
+  }
+}
