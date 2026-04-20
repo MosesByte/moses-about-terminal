@@ -975,11 +975,16 @@ input {
 @media (max-width: 900px) {
   body {
     overflow: auto;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .terminal {
+    width: 100%;
     height: auto;
-    min-height: calc(100vh - 24px);
+    min-height: calc(100svh - 24px);
+    margin: 12px auto;
+    padding: 12px 14px 14px;
+    border-radius: 10px;
   }
 
   .hero {
@@ -993,13 +998,18 @@ input {
 
   .hero-right {
     max-width: 100%;
+    margin-bottom: 4px;
   }
 
-  .main-title {
-    font-size: 24px;
+  .hero-right p {
+    font-size: 13px;
+    margin-bottom: 6px;
   }
 
-  .hero-right p,
+  .welcome-title {
+    font-size: 15px;
+  }
+
   .prompt,
   input,
   .ghost-text,
@@ -1009,7 +1019,126 @@ input {
   }
 
   .hint-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* guestbook: full-width strip at bottom */
+  .gb-toggle {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .gb-panel {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55svh;
+    border-radius: 14px 14px 0 0;
+    border-bottom: none;
+  }
+
+  /* egg hint: move up so it doesn't clash with guestbook toggle */
+  .egg-hint {
+    bottom: 16px;
+    right: 16px;
+    font-size: 11px;
+    padding: 10px 32px 10px 12px;
+  }
+
+  /* links panel: reduce padding on tablet */
+  .links-panel {
+    padding: 20px 16px 18px;
+  }
+
+  /* badge tooltip: anchor right on narrow screens to avoid clipping */
+  .links-badges .badge:last-child::after {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal {
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    min-height: 100svh;
+  }
+
+  .titlebar {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* shorten prompt on very narrow screens */
+  .prompt {
     font-size: 13px;
-    padding: 4px 10px;
+  }
+
+  .prompt::before {
+    content: "PS> ";
+  }
+
+  .prompt {
+    display: none;
+  }
+
+  .input-line::before {
+    content: "PS>";
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .hero-right p {
+    font-size: 12px;
+  }
+
+  .welcome-title {
+    font-size: 14px;
+  }
+
+  .output {
+    font-size: 13px;
+  }
+
+  .hint-btn {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+
+  .cmd-hints {
+    gap: 6px;
+  }
+
+  /* guestbook taller on phones */
+  .gb-panel {
+    height: 65svh;
+  }
+
+  .egg-hint {
+    display: none;
+  }
+
+  /* links panel full comfortable on small phones */
+  .links-panel {
+    padding: 16px 14px 14px;
+    border-radius: 12px;
+  }
+
+  .links-title {
+    font-size: 16px;
+  }
+
+  .link-item {
+    padding: 10px 12px;
   }
 }

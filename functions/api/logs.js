@@ -25,19 +25,25 @@ export async function onRequestGet(context) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const listed = await env.VIEWS.list({ prefix: "ip:" });
-  const total  = await env.VIEWS.get("hits");
+  const listed   = await env.VIEWS.list({ prefix: "ip:" });
+  const total    = await env.VIEWS.get("hits");
+  const ownerIp  = env.OWNER_IP ?? null;
 
   const countries = {};
-  const entries = [];
+  const entries   = [];
+  let ownerCount  = 0;
 
   for (const k of listed.keys) {
     const parts = k.name.split(":");
-    // format: ip:{unixMs}:{country}:{ip}
     const ts      = parseInt(parts[1]);
     const country = parts[2];
     const ip      = parts.slice(3).join(":");
     const time    = isNaN(ts) ? "?" : new Date(ts).toISOString().replace("T", " ").slice(0, 19);
+
+    if (ownerIp && ip === ownerIp) {
+      ownerCount++;
+      continue;
+    }
 
     countries[country] = (countries[country] ?? 0) + 1;
     entries.push({ time, country, ip });
@@ -52,16 +58,21 @@ export async function onRequestGet(context) {
     .map(e => `${e.time}  ${e.ip.padEnd(40)}  ${countryName(e.country)}`)
     .join("\n");
 
+  const ownerLine = ownerIp
+    ? `Owner visits: ${ownerCount} (filtered from stats)`
+    : null;
+
   const body = [
     `Total views : ${total ?? 0}`,
     `Logged IPs  : ${entries.length}`,
+    ownerLine,
     "",
     "--- Countries ---",
     countryLines || "  No data yet",
     "",
     "--- IP Log ---",
     ipLines || "  No data yet"
-  ].join("\n");
+  ].filter(l => l !== null).join("\n");
 
   return new Response(body, {
     headers: { "Content-Type": "text/plain" }
