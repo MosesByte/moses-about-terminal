@@ -841,6 +841,73 @@ input {
   margin-bottom: 20px;
 }
 
+.links-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.links-badges {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  color: var(--text-strong);
+  cursor: default;
+  flex-shrink: 0;
+  position: relative;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.badge:hover {
+  color: #fff;
+  border-color: var(--text-title);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 8px var(--shadow-soft);
+}
+
+.badge::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 4, 14, 0.97);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 3px 7px;
+  font-family: var(--font-main);
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  color: var(--text-strong);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.badge:hover::after {
+  opacity: 1;
+}
+
+.badge svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
 .links-title {
   font-size: 18px;
   font-weight: 700;
