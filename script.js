@@ -40,7 +40,6 @@ const commands = {
 <span class="cmd-name">music</span>Now playing<br>
 <span class="cmd-name">time</span>Current time<br>
 <span class="cmd-name">date</span>Current date<br>
-<span class="cmd-name">privacy</span>Privacy policy<br>
 <span class="cmd-name">clear</span>Clear terminal`,
 
   about: `
@@ -146,7 +145,7 @@ if (savedFont && fontMap[savedFont]) {
   setFont(savedFont);
 }
 
-const allCommands = [...Object.keys(commands), "theme", "neofetch", "music", "time", "date", "clear", "logs", "font", "reset"];
+const allCommands = [...Object.keys(commands).filter(c => c !== "privacy"), "theme", "neofetch", "music", "time", "date", "clear", "logs", "font", "reset"];
 const themeArgs = themeMap;
 
 const ghost = document.getElementById("ghost");
@@ -718,6 +717,7 @@ const adminOverlay = document.getElementById("admin-overlay");
 
 function closeAdminPanel() {
   adminOverlay.classList.remove("open");
+  terminal.classList.remove("dimmed");
   input.focus();
 }
 
