@@ -1,3 +1,5 @@
+<img width="1710" height="1107" alt="Bildschirmfoto 2026-04-20 um 02 05 13" src="https://github.com/user-attachments/assets/eb1f4970-ef0f-4131-a386-6dc29fecd098" />
+
 # moses-about-terminal
 
 I saw something like this somewhere and thought it looked pretty cool,  
