@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git -C \"c:/Users/Leon/Desktop/Coding Proj/moses-about-terminal\" diff --stat HEAD)",
+      "Bash(git -C \"c:/Users/Leon/Desktop/Coding Proj/moses-about-terminal\" status)",
+      "Bash(git -C \"c:/Users/Leon/Desktop/Coding Proj/moses-about-terminal\" log --oneline -5)"
+    ]
+  }
+}
